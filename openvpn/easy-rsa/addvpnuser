@@ -1,0 +1,19 @@
+#!/usr/local/bin/bash
+if (( $# == 0 ))
+then
+    echo usuage: $0 username
+    exit 1;
+fi
+easyrsa build-client-full $1 nopass
+if (( $? != 0))
+then
+    echo Error easyrsa build-client-full $1 nopass failed.
+    exit 1;
+fi
+
+mkdir -p user/$1
+cp -f ../ta.key user/$1/
+cp -f ../ca.crt user/$1/
+cp -f ./pki/issued/${1}.crt user/$1/client.crt
+cp -f ./pki/private/${1}.key user/$1/client.key
+cp -f client.ovpn user/$1/

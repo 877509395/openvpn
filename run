@@ -1,0 +1,10 @@
+#!/usr/local/bin/bash
+cd openvpn/easy-rsa;
+easyrsa init-pki
+easyrsa build-ca nopass
+easyrsa gen-dh
+openvpn --genkey --secret ta.key
+easyrsa build-server-full server nopass
+cp -f ta.key pki/dh.pem pki/ca.crt ./pki/issued/server.crt ./pki/private/server.key ../
+mv ../dh.pem ../dh2048.pem
+./addvpnuser test_user
